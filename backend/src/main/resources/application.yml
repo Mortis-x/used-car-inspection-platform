@@ -1,0 +1,56 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: car-verify
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/car_inspection?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false&rewriteBatchedStatements=true
+    username: root
+    password: root123456
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+  data:
+    redis:
+      host: localhost
+      port: 6380
+      database: 0
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+
+app:
+  jwt:
+    # 生产环境务必通过环境变量覆盖
+    secret: car-verify-platform-jwt-secret-key-please-change-in-prod
+    expire-hours: 12
+  minio:
+    endpoint: http://localhost:9000
+    access-key: minioadmin
+    secret-key: minioadmin
+    bucket: car-evidence
+  rules:
+    # 报告有效期（天）：同一车辆在该周期内只允许一份有效报告
+    report-valid-days: 90
+
+logging:
+  level:
+    root: info
+    com.usedcar.platform: debug
